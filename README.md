@@ -12,8 +12,8 @@ npm (v6 or higher)
 1. Clone the repository:
 
 ```
-git clone https://github.com/your-repo/oauth-server.git
-cd oauth-server
+git clone https://github.com/WayneJr/upfirst-oauth-server.git
+cd upfirst-oauth-server
 ```
 
 2. Install dependencies:
@@ -31,6 +31,14 @@ npm start
 ```
 
 2. The server will start by default on `http://localhost:8081`
+
+## Running the tests
+
+1. Run the tests
+
+```
+npm test
+```
 
 ## Endpoints
 
