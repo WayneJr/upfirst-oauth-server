@@ -1,7 +1,7 @@
 {
   "name": "oauth-server",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.ts",
   "scripts": {
     "dev": "ts-node server.ts",
     "test": "jest"
