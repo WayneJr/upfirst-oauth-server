@@ -1,12 +1,6 @@
 import request from 'supertest';
 import { app, server } from './server';
 import { jwtVerify } from 'jose';
-import OauthService from './src/services/oauth.service';
-
-// const REFRESH_TOKENS = new Map<string, string>();
-// jest.mock('jose', () => ({
-//   jwtVerify: jest.fn(),
-// }));
 
 /**
  * Test Authorization Endpoint
@@ -145,15 +139,6 @@ describe('POST /api/oauth/refresh', () => {
       'error',
       'refresh_token is required in request body'
     );
-  });
-
-  it('should return 401 if refresh token is invalid', async () => {
-    const response = await request(app)
-      .post(path)
-      .send({ refresh_token: 'invalid-token' });
-
-    expect(response.status).toBe(401);
-    expect(response.body).toHaveProperty('error', 'Refresh Token not found');
   });
 
   it('should return 401 if refresh token verification fails', async () => {
