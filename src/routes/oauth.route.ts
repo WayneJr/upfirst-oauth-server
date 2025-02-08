@@ -12,6 +12,7 @@ class OauthRoutes {
   initializeRoutes() {
     this.router.route('/authorize').get(oauthController.getAuthorization);
     this.router.route('/token').post(oauthController.getToken);
+    this.router.route('/refresh').post(oauthController.refreshAccessToken);
   }
 }
 

@@ -10,7 +10,7 @@ export default class OauthController {
   getAuthorization(req: Request, res: Response, next: NextFunction) {
     try {
       const { response_type, client_id, redirect_uri, state } = req.query;
-      oauthService.getAuthorization(
+      void oauthService.getAuthorization(
         response_type as string,
         client_id as string,
         redirect_uri as string,
@@ -25,7 +25,8 @@ export default class OauthController {
   getToken(req: Request, res: Response, next: NextFunction) {
     try {
       const { grant_type, code, client_id, redirect_uri } = req.body;
-      oauthService.getToken(
+
+      void oauthService.getToken(
         grant_type as string,
         client_id as string,
         code as string,
@@ -37,6 +38,23 @@ export default class OauthController {
     }
   }
 
+  refreshAccessToken(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { refresh_token } = req.body;
+
+      if (!refresh_token) {
+        res
+          .status(400)
+          .json({ error: 'refresh_token is required in request body' });
+        return;
+      }
+      void oauthService.refreshAccessToken(refresh_token, res);
+    } catch (error) {
+      apiErrorHandler(error, req, res, next);
+    }
+  }
+
+  // For testing the flow.
   process(req: Request, res: Response, next: NextFunction) {
     try {
       const { code } = req.query;
@@ -62,8 +80,7 @@ export default class OauthController {
           response
             .on('end', () => {
               res.status(200).json({
-                message: 'Access token received',
-                data: JSON.parse(data),
+                ...JSON.parse(data),
               });
             })
             .on('error', (error) => {
