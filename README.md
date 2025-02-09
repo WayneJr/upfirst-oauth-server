@@ -4,8 +4,8 @@ This project is an OAuth server implementation using Node.js and Express. It pro
 
 ## Prerequisites
 
-Node.js (v14 or higher)
-npm (v6 or higher)
+- Node.js (v14 or higher)
+- npm (v6 or higher)
 
 ## Installation
 
@@ -30,7 +30,7 @@ npm install
 npm start
 ```
 
-2. The server will start by default on `http://localhost:8081`
+2. The server will start by default on `http://localhost:8080`
 
 ## Running the tests
 
