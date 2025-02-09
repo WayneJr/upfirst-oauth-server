@@ -13,6 +13,7 @@ const CLIENT_ID = 'upfirst';
 const REDIRECT_URI = 'http://localhost:8081/process';
 const SECRET_KEY = randomBytes(32);
 const TOKEN_EXPIRATION = '1h';
+const TOKEN_EXPIRATION_IN_SECONDS = '3600';
 const REFRESH_TOKEN_EXPIRATION = '7d';
 const AUTH_CODES = new Map<string, string>(); // Map Auth Codes -> Client Ids
 // const REFRESH_TOKENS = new Map<string, string>(); // Map Refresh Token -> Client Ids
@@ -86,7 +87,7 @@ export default class OauthService {
         data: {
           access_token: accessToken,
           token_type: BEARER,
-          expires_in: TOKEN_EXPIRATION,
+          expires_in: TOKEN_EXPIRATION_IN_SECONDS,
           refresh_token: refreshToken,
         },
       });
@@ -96,7 +97,7 @@ export default class OauthService {
       data: {
         access_token: accessToken,
         token_type: BEARER,
-        expires_in: TOKEN_EXPIRATION,
+        expires_in: TOKEN_EXPIRATION_IN_SECONDS,
       },
     });
   }
@@ -124,7 +125,7 @@ export default class OauthService {
       data: {
         access_token: newAccessToken,
         token_type: BEARER,
-        expires_in: TOKEN_EXPIRATION, // 1 hour
+        expires_in: TOKEN_EXPIRATION_IN_SECONDS, // 1 hour
         refresh_token: refreshToken,
       },
     });
