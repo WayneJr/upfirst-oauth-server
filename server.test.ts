@@ -70,9 +70,9 @@ describe('POST /api/oauth/token', () => {
       'application/json; charset=utf-8'
     );
 
-    expect(response.body.data).toHaveProperty('access_token');
-    expect(response.body.data).toHaveProperty('token_type', BEARER);
-    expect(response.body.data).toHaveProperty('expires_in');
+    expect(response.body).toHaveProperty('access_token');
+    expect(response.body).toHaveProperty('token_type', BEARER);
+    expect(response.body).toHaveProperty('expires_in');
   });
 
   it('should return access and refresh token when grant type is refresh token and valid authorization code is provided', async () => {
@@ -88,10 +88,10 @@ describe('POST /api/oauth/token', () => {
     expect(response.headers['content-type']).toContain(
       'application/json; charset=utf-8'
     );
-    expect(response.body.data).toHaveProperty('access_token');
-    expect(response.body.data).toHaveProperty('token_type', BEARER);
-    expect(response.body.data).toHaveProperty('expires_in');
-    expect(response.body.data).toHaveProperty('refresh_token');
+    expect(response.body).toHaveProperty('access_token');
+    expect(response.body).toHaveProperty('token_type', BEARER);
+    expect(response.body).toHaveProperty('expires_in');
+    expect(response.body).toHaveProperty('refresh_token');
   });
   // Invalid Code
   it('should return 400 for invalid authorization code', async () => {
@@ -165,8 +165,8 @@ describe('POST /api/oauth/refresh', () => {
     expect(response.headers['content-type']).toContain(
       'application/json; charset=utf-8'
     );
-    expect(response.body.data).toHaveProperty('access_token');
-    expect(response.body.data).toHaveProperty('token_type', BEARER);
-    expect(response.body.data).toHaveProperty('expires_in');
+    expect(response.body).toHaveProperty('access_token');
+    expect(response.body).toHaveProperty('token_type', BEARER);
+    expect(response.body).toHaveProperty('expires_in');
   });
 });

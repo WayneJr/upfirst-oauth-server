@@ -83,22 +83,16 @@ export default class OauthService {
       );
 
       return res.status(200).json({
-        message: 'Access Token Retrieved Successfully',
-        data: {
-          access_token: accessToken,
-          token_type: BEARER,
-          expires_in: TOKEN_EXPIRATION_IN_SECONDS,
-          refresh_token: refreshToken,
-        },
-      });
-    }
-    return res.status(200).json({
-      message: 'Access Token Retrieved Successfully',
-      data: {
         access_token: accessToken,
         token_type: BEARER,
         expires_in: TOKEN_EXPIRATION_IN_SECONDS,
-      },
+        refresh_token: refreshToken,
+      });
+    }
+    return res.status(200).json({
+      access_token: accessToken,
+      token_type: BEARER,
+      expires_in: TOKEN_EXPIRATION_IN_SECONDS,
     });
   }
 
@@ -121,13 +115,10 @@ export default class OauthService {
     );
 
     return res.status(200).json({
-      message: 'Access Token Refreshed',
-      data: {
-        access_token: newAccessToken,
-        token_type: BEARER,
-        expires_in: TOKEN_EXPIRATION_IN_SECONDS, // 1 hour
-        refresh_token: refreshToken,
-      },
+      access_token: newAccessToken,
+      token_type: BEARER,
+      expires_in: TOKEN_EXPIRATION_IN_SECONDS, // 1 hour
+      refresh_token: refreshToken,
     });
   }
 
