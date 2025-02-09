@@ -153,13 +153,11 @@ describe('POST /api/oauth/refresh', () => {
   });
 
   it('should return an access token when you use pass a valid refresh token', async () => {
-    const validAuthCode = 'TEST_CODE'; // You might need to generate a mock one
+    // const validAuthCode = 'TEST_CODE'; // You might need to generate a mock one
+    (jwtVerify as jest.Mock).mockResolvedValue('');
     const response = await request(app)
       .post('/api/oauth/refresh')
-      .send({
-        refresh_token:
-          'eyJhbGciOiJIUzI1NiJ9.eyJ0b2tlbiI6IlRFU1RfVE9LRU4iLCJleHAiOjE3Mzk2MjkxMjJ9.svT0p8s4KeWpUaXn2D9bPgcvD8SQbptpZwHyu9PvEYc',
-      })
+      .send({ refresh_token: validRefreshToken })
       .set('Content-Type', 'application/json');
 
     expect(response.status).toBe(200);
