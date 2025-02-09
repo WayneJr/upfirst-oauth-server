@@ -68,7 +68,7 @@ npm test
 
 - **URL**: `/api/oauth/refresh`
 - **Method**: `POST`
-- **Description**: Exchanges an authorization code for an access token.
+- **Description**: Exchanges a refresh token for an access token.
 - **Body Parameters**:
   - `refresh_token` (required): The refesh token.
 
