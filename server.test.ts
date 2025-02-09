@@ -48,6 +48,8 @@ describe('GET /api/oauth/authorize', () => {
  */
 
 describe('POST /api/oauth/token', () => {
+  const path = '/api/oauth/token';
+
   afterAll(() => {
     server.close();
   });
@@ -56,7 +58,7 @@ describe('POST /api/oauth/token', () => {
   it('should return access token when a valid authorization code is provided', async () => {
     const validAuthCode = 'TEST_CODE'; // You might need to generate a mock one
     const response = await request(app)
-      .post('/api/oauth/token')
+      .post(path)
       .send(
         `grant_type=authorization_code&code=${validAuthCode}&client_id=upfirst&redirect_uri=http://localhost:8081/process`
       )
@@ -75,7 +77,7 @@ describe('POST /api/oauth/token', () => {
   it('should return access and refresh token when grant type is refresh token and valid authorization code is provided', async () => {
     const validAuthCode = 'TEST_CODE1';
     const response = await request(app)
-      .post('/api/oauth/token')
+      .post(path)
       .send(
         `grant_type=refresh_token&code=${validAuthCode}&client_id=upfirst&redirect_uri=http://localhost:8081/process`
       )
@@ -93,7 +95,7 @@ describe('POST /api/oauth/token', () => {
   // Invalid Code
   it('should return 400 for invalid authorization code', async () => {
     const response = await request(app)
-      .post('/api/oauth/token')
+      .post(path)
       .send(
         `grant_type=authorization_code&code=INVALID_CODE&client_id=upfirst&redirect_uri=http://localhost:8081/process`
       )
@@ -135,10 +137,8 @@ describe('POST /api/oauth/refresh', () => {
   it('should return 401 if refresh token is missing', async () => {
     const response = await request(app).post(path).send({});
     expect(response.status).toBe(400);
-    expect(response.body).toHaveProperty(
-      'error',
-      'refresh_token is required in request body'
-    );
+    expect(response.body).toHaveProperty('error', 'Missing required fields');
+    expect(response.body).toHaveProperty('missingFields', ['refresh_token']);
   });
 
   it('should return 401 if refresh token verification fails', async () => {
@@ -156,7 +156,7 @@ describe('POST /api/oauth/refresh', () => {
     // const validAuthCode = 'TEST_CODE'; // You might need to generate a mock one
     (jwtVerify as jest.Mock).mockResolvedValue('');
     const response = await request(app)
-      .post('/api/oauth/refresh')
+      .post(path)
       .send({ refresh_token: validRefreshToken })
       .set('Content-Type', 'application/json');
 

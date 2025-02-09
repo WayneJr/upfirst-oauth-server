@@ -1,5 +1,14 @@
 import { Router } from 'express';
 import OauthController from '../controllers/oauth.controller';
+import { validateFields } from '../middleware/requests.validator';
+import {
+  CLIENT_ID,
+  CODE,
+  GRANT_TYPE,
+  REDIRECT_URI,
+  REFRESH_TOKEN,
+  RESPONSE_TYPE,
+} from '../util/constants';
 
 const oauthController = new OauthController();
 
@@ -10,9 +19,21 @@ class OauthRoutes {
     this.initializeRoutes();
   }
   initializeRoutes() {
-    this.router.route('/authorize').get(oauthController.getAuthorization);
-    this.router.route('/token').post(oauthController.getToken);
-    this.router.route('/refresh').post(oauthController.refreshAccessToken);
+    this.router.get(
+      '/authorize',
+      validateFields('query', [RESPONSE_TYPE, CLIENT_ID, REDIRECT_URI]),
+      oauthController.getAuthorization
+    );
+    this.router.post(
+      '/token',
+      validateFields('body', [GRANT_TYPE, CLIENT_ID, REDIRECT_URI, CODE]),
+      oauthController.getToken
+    );
+    this.router.post(
+      '/refresh',
+      validateFields('body', [REFRESH_TOKEN]),
+      oauthController.refreshAccessToken
+    );
   }
 }
 

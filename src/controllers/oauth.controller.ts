@@ -10,6 +10,7 @@ export default class OauthController {
   getAuthorization(req: Request, res: Response, next: NextFunction) {
     try {
       const { response_type, client_id, redirect_uri, state } = req.query;
+
       void oauthService.getAuthorization(
         response_type as string,
         client_id as string,

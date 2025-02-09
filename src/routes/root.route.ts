@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import OauthController from '../controllers/oauth.controller';
+import { validateFields } from '../middleware/requests.validator';
+import { CODE } from '../util/constants';
 
 class RootRoutes {
   router = Router();
@@ -9,7 +11,11 @@ class RootRoutes {
     this.initializeRoutes();
   }
   initializeRoutes() {
-    this.router.route('/process').get(this.oauthController.process);
+    this.router.get(
+      '/process',
+      validateFields('query', [CODE]),
+      this.oauthController.process
+    );
   }
 }
 
