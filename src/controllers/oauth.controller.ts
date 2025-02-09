@@ -43,13 +43,6 @@ export default class OauthController {
   refreshAccessToken(req: Request, res: Response, next: NextFunction) {
     try {
       const { refresh_token } = req.body;
-
-      // if (!refresh_token) {
-      //   res
-      //     .status(400)
-      //     .json({ error: 'refresh_token is required in request body' });
-      //   return;
-      // }
       void oauthService.refreshAccessToken(refresh_token, res);
     } catch (error) {
       apiErrorHandler(error, req, res, next);
@@ -60,7 +53,6 @@ export default class OauthController {
   process(req: Request, res: Response, next: NextFunction) {
     try {
       const { code } = req.query;
-      // if (!code) res.status(400).send('Authorization code missing');
       let data = '';
 
       // Exchange code for access token

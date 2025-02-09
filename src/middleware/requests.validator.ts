@@ -14,9 +14,9 @@ export const validateFields = (
         error: 'Missing required fields',
         missingFields,
       });
-      return; // ✅ Ensure the function stops here
+      return; // Ensure the function stops here
     }
 
-    next(); // ✅ Only call next() if validation passes
+    next(); // Only call next() if validation passes
   };
 };
