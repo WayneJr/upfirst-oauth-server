@@ -1,6 +1,6 @@
 # OAuth Server
 
-This project is an OAuth server implementation using Node.js and Express. It provides endpoints for authorization and token management.
+This project is an OAuth server implementation using Node.js and Express. It provides endpoints for authorization and token management. It is compliant with the [OAuth 2.0 Authorization Framework 6749](https://datatracker.ietf.org/doc/html/rfc6749)
 
 ## Prerequisites
 
