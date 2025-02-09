@@ -1,6 +1,7 @@
 import request from 'supertest';
 import { app, server } from './server';
 import { jwtVerify } from 'jose';
+import { BEARER } from './src/util/constants';
 
 /**
  * Test Authorization Endpoint
@@ -70,7 +71,7 @@ describe('POST /api/oauth/token', () => {
     );
 
     expect(response.body.data).toHaveProperty('access_token');
-    expect(response.body.data).toHaveProperty('token_type', 'Bearer');
+    expect(response.body.data).toHaveProperty('token_type', BEARER);
     expect(response.body.data).toHaveProperty('expires_in');
   });
 
@@ -88,7 +89,7 @@ describe('POST /api/oauth/token', () => {
       'application/json; charset=utf-8'
     );
     expect(response.body.data).toHaveProperty('access_token');
-    expect(response.body.data).toHaveProperty('token_type', 'Bearer');
+    expect(response.body.data).toHaveProperty('token_type', BEARER);
     expect(response.body.data).toHaveProperty('expires_in');
     expect(response.body.data).toHaveProperty('refresh_token');
   });
@@ -165,7 +166,7 @@ describe('POST /api/oauth/refresh', () => {
       'application/json; charset=utf-8'
     );
     expect(response.body.data).toHaveProperty('access_token');
-    expect(response.body.data).toHaveProperty('token_type', 'Bearer');
+    expect(response.body.data).toHaveProperty('token_type', BEARER);
     expect(response.body.data).toHaveProperty('expires_in');
   });
 });

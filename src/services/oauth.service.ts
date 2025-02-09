@@ -2,6 +2,12 @@ import { randomBytes } from 'crypto';
 import { Response } from 'express';
 import { jwtVerify, SignJWT } from 'jose';
 import { AccessTokenResponse } from '../interfaces/oauth.interface';
+import {
+  AUTHORIZATION_CODE,
+  BEARER,
+  CODE,
+  REFRESH_TOKEN,
+} from '../util/constants';
 
 const CLIENT_ID = 'upfirst';
 const REDIRECT_URI = 'http://localhost:8081/process';
@@ -13,17 +19,8 @@ const AUTH_CODES = new Map<string, string>(); // Map Auth Codes -> Client Ids
 
 AUTH_CODES.set('TEST_CODE', CLIENT_ID); // Add a code for testing
 AUTH_CODES.set('TEST_CODE1', CLIENT_ID); // Add a code for testing
-// REFRESH_TOKENS.set(
-//   'eyJhbGciOiJIUzI1NiJ9.eyJ0b2tlbiI6IlRFU1RfVE9LRU4iLCJleHAiOjE3Mzk2MjkxMjJ9.svT0p8s4KeWpUaXn2D9bPgcvD8SQbptpZwHyu9PvEYc',
-//   CLIENT_ID
-// ); // Add Test Refresh token
 
 export default class OauthService {
-  // REFRESH_TOKENS;
-  constructor() {
-    // REFRESH_TOKENS = new Map<string, string>();
-  }
-
   getAuthorization(
     response_type: string,
     client_id: string,
@@ -32,7 +29,7 @@ export default class OauthService {
     res: Response
   ) {
     if (
-      response_type !== 'code' ||
+      response_type !== CODE ||
       client_id !== CLIENT_ID ||
       redirect_uri !== REDIRECT_URI
     ) {
@@ -58,7 +55,7 @@ export default class OauthService {
     Response<AccessTokenResponse, Record<string, AccessTokenResponse>>
   > {
     if (
-      (grant_type !== 'authorization_code' && grant_type !== 'refresh_token') ||
+      (grant_type !== AUTHORIZATION_CODE && grant_type !== REFRESH_TOKEN) ||
       client_id !== CLIENT_ID ||
       redirect_uri !== REDIRECT_URI ||
       !code
@@ -76,9 +73,9 @@ export default class OauthService {
     AUTH_CODES.delete(code);
     const accessToken = await this.signToken({ clientId }, TOKEN_EXPIRATION);
 
-    if (grant_type == 'refresh_token') {
-      // if it's a refresh token request return only the refresh token
-      // let refreshToken: string;
+    if (grant_type == REFRESH_TOKEN) {
+      // if it's a refresh token request
+      // add the refresh token to the request
       const refreshToken = await this.signToken(
         { clientId },
         REFRESH_TOKEN_EXPIRATION
@@ -88,7 +85,7 @@ export default class OauthService {
         message: 'Access Token Retrieved Successfully',
         data: {
           access_token: accessToken,
-          token_type: 'Bearer',
+          token_type: BEARER,
           expires_in: TOKEN_EXPIRATION,
           refresh_token: refreshToken,
         },
@@ -98,7 +95,7 @@ export default class OauthService {
       message: 'Access Token Retrieved Successfully',
       data: {
         access_token: accessToken,
-        token_type: 'Bearer',
+        token_type: BEARER,
         expires_in: TOKEN_EXPIRATION,
       },
     });
@@ -113,14 +110,8 @@ export default class OauthService {
     try {
       void (await jwtVerify(refreshToken, SECRET_KEY)); // verify the refresh token
     } catch (error) {
-      // return res.status(401).json({ message: 'Invalid refresh token' });
-      // Check if response was already sent
       return res.status(401).json({ error: 'Invalid refresh token' });
-
-      // throw new Error('Token verification failed');
     }
-
-    // const clientId = REFRESH_TOKENS.get(refreshToken) as string;
 
     // Issue a new access token
     const newAccessToken = await this.signToken(
@@ -132,22 +123,12 @@ export default class OauthService {
       message: 'Access Token Refreshed',
       data: {
         access_token: newAccessToken,
-        token_type: 'Bearer',
+        token_type: BEARER,
         expires_in: TOKEN_EXPIRATION, // 1 hour
         refresh_token: refreshToken,
       },
     });
   }
-
-  // refreshTokenExists(clientId: string): boolean {
-  //   return Array.from(REFRESH_TOKENS.values()).includes(clientId);
-  // }
-
-  // getRefreshToken(clientId: string): string {
-  //   return Array.from(REFRESH_TOKENS.entries())
-  //     .filter(([_, client]) => client === clientId)
-  //     .map(([token]) => token)[0];
-  // }
 
   async signToken(value: any, expiry: string): Promise<string> {
     const token = await new SignJWT(value)

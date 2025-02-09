@@ -3,6 +3,7 @@ import http from 'http';
 import OauthService from '../services/oauth.service';
 import querystring from 'querystring';
 import { apiErrorHandler } from '../handlers/errorHandler';
+import { REFRESH_TOKEN } from '../util/constants';
 
 const oauthService: OauthService = new OauthService();
 
@@ -43,12 +44,12 @@ export default class OauthController {
     try {
       const { refresh_token } = req.body;
 
-      if (!refresh_token) {
-        res
-          .status(400)
-          .json({ error: 'refresh_token is required in request body' });
-        return;
-      }
+      // if (!refresh_token) {
+      //   res
+      //     .status(400)
+      //     .json({ error: 'refresh_token is required in request body' });
+      //   return;
+      // }
       void oauthService.refreshAccessToken(refresh_token, res);
     } catch (error) {
       apiErrorHandler(error, req, res, next);
@@ -59,7 +60,7 @@ export default class OauthController {
   process(req: Request, res: Response, next: NextFunction) {
     try {
       const { code } = req.query;
-      if (!code) res.status(400).send('Authorization code missing');
+      // if (!code) res.status(400).send('Authorization code missing');
       let data = '';
 
       // Exchange code for access token
@@ -92,7 +93,7 @@ export default class OauthController {
 
       myReq.write(
         querystring.stringify({
-          grant_type: 'authorization_code',
+          grant_type: REFRESH_TOKEN,
           client_id: 'upfirst',
           code: code as string,
           redirect_uri: 'http://localhost:8081/process',

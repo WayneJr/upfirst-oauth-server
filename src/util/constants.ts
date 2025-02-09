@@ -1,4 +1,5 @@
 const AUTHORIZATION_CODE = 'authorization_code';
+const BEARER = 'bearer';
 const CLIENT_ID = 'client_id';
 const CODE = 'code';
 const GRANT_TYPE = 'grant_type';
@@ -9,6 +10,7 @@ const STATE = 'state';
 
 export {
   AUTHORIZATION_CODE,
+  BEARER,
   CLIENT_ID,
   CODE,
   GRANT_TYPE,
